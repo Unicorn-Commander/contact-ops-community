@@ -1,0 +1,104 @@
+# Contact-Ops - Production Docker Compose
+# Routes:
+#   contacts.magicunicorn.dev          → contact-ops-frontend  (SPA, port 80)
+#   mcp.contacts.magicunicorn.dev      → contact-ops-backend   (FastAPI/MCP, port 8501)
+#   carddav.contacts.magicunicorn.dev  → contact-ops-backend   (same container, CardDAV paths)
+# Auth: react-oidc-context PKCE → Keycloak uchub realm (no OAuth2 Proxy).
+
+services:
+  contact-ops-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: contact-ops-backend
+    restart: unless-stopped
+    expose:
+      - "8501"
+    env_file:
+      - .env
+    environment:
+      - STANDALONE_MODE=false
+    networks:
+      - unicorn-network
+      - web
+      - unicorn-vectordb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.contact-ops-mcp.rule=Host(`mcp.contacts.magicunicorn.dev`)"
+      - "traefik.http.routers.contact-ops-mcp.entrypoints=websecure"
+      - "traefik.http.routers.contact-ops-mcp.tls=true"
+      - "traefik.http.routers.contact-ops-mcp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.contact-ops-mcp.loadbalancer.server.port=8501"
+      # CardDAV: same backend container, separate host. Backend's JWT middleware
+      # bypasses /carddav and /.well-known/carddav (HTTP Basic auth instead).
+      # /.well-known/carddav → 301 /carddav/ — Apple discovery flow works.
+      - "traefik.http.routers.contact-ops-carddav.rule=Host(`carddav.contacts.magicunicorn.dev`)"
+      - "traefik.http.routers.contact-ops-carddav.entrypoints=websecure"
+      - "traefik.http.routers.contact-ops-carddav.tls=true"
+      - "traefik.http.routers.contact-ops-carddav.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.contact-ops-carddav.service=contact-ops-mcp"
+      - "traefik.docker.network=web"
+
+  contact-ops-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        # Cross-app suite links: dogfood points at the dogfood Project-Ops.
+        VITE_PROJECTS_BASE_URL: "${VITE_PROJECTS_BASE_URL:-https://projects.magicunicorn.dev}"
+        # Analytics (Umami + PostHog) — empty unless set; dormant by default.
+        VITE_UMAMI_SRC: "${VITE_UMAMI_SRC:-}"
+        VITE_UMAMI_WEBSITE_ID: "${VITE_UMAMI_WEBSITE_ID:-}"
+        VITE_POSTHOG_KEY: "${VITE_POSTHOG_KEY:-}"
+        VITE_POSTHOG_HOST: "${VITE_POSTHOG_HOST:-}"
+    container_name: contact-ops-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - unicorn-network
+      - web
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.contact-ops-web.rule=Host(`contacts.magicunicorn.dev`)"
+      - "traefik.http.routers.contact-ops-web.entrypoints=websecure"
+      - "traefik.http.routers.contact-ops-web.tls=true"
+      - "traefik.http.routers.contact-ops-web.tls.certresolver=letsencrypt"
+      - "traefik.http.services.contact-ops-web.loadbalancer.server.port=80"
+      - "traefik.docker.network=web"
+
+networks:
+  unicorn-network:
+    external: true
+  web:
+    external: true
+  unicorn-vectordb:
+    external: true
