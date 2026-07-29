@@ -7,6 +7,18 @@ Contact-Ops is Magic Unicorn's canonical person and organization registry. It is
 
 Contact-Ops manages the contacts you actively curate. Data Intel (`verify.centerdeep.online`) stays as the verification / intelligence database. They are peer systems federated via RFC 8693 token-exchange OBO; neither owns the other.
 
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/product.png" alt="Suite relationship graph (federated CRM surface)" width="900" />
+</p>
+
+<p align="center"><em>Suite relationship graph (federated CRM surface)</em></p>
+
+Live: **[contact-ops.unicorncommander.ai](https://contact-ops.unicorncommander.ai)**
+
+---
 ## Where things live
 
 | What | Where |
