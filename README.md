@@ -75,9 +75,6 @@ Production endpoints (Phase 1+):
 Phase 0 is the scaffold. The Postgres schema (35 tables, 200+ indexes, RLS, HIPAA fence, append-only `action_event`) is in `backend/alembic/`. The MCP server in `backend/contact_ops/mcp/server.py` answers the JSON-RPC handshake but registers no tools yet. Tool surface lands in Phase 1.
 
 The Phase 0 review tracker, blockers, and per-track work threads are in:
-- `/Users/aaronstransky/Documents/Contact-Ops-Phase-0-Review.md`
-- `/Users/aaronstransky/Documents/Contact-Ops-Track-B-Codex-Prompt.md`
-- `/Users/aaronstransky/Documents/Contact-Ops-Track-C-DeepSeek-Prompt.md`
 
 ## License
 
