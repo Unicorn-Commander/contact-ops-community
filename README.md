@@ -78,4 +78,4 @@ The Phase 0 review tracker, blockers, and per-track work threads are in:
 
 ## License
 
-TBD. Treat as Magic Unicorn proprietary until Aaron decides on a public license.
+TBD. Treat as Magic Unicorn proprietary until maintainers confirm the public license.
