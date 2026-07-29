@@ -11,14 +11,21 @@ Contact-Ops manages the contacts you actively curate. Data Intel (`verify.center
 ## Screenshots
 
 <p align="center">
-  <img src="docs/screenshots/product.png" alt="Suite relationship graph (federated CRM surface)" width="900" />
+  <img src="docs/screenshots/people.png" alt="Contact-Ops — people directory" width="900" />
 </p>
+<p align="center"><em>People directory — the phonebook every suite app federates.</em></p>
 
-<p align="center"><em>Suite relationship graph (federated CRM surface)</em></p>
+<p align="center">
+  <img src="docs/screenshots/graph.png" alt="Contact-Ops — relationship graph" width="900" />
+</p>
+<p align="center"><em>Relationship graph — orgs, people, and links in one place.</em></p>
 
-Live: **[contact-ops.unicorncommander.ai](https://contact-ops.unicorncommander.ai)**
+<p align="center">
+  <img src="docs/screenshots/review.png" alt="Contact-Ops — review surface" width="900" />
+</p>
+<p align="center"><em>Review surface — curate and approve contact intelligence.</em></p>
 
----
+
 ## Where things live
 
 | What | Where |
