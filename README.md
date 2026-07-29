@@ -23,13 +23,11 @@ Live: **[contact-ops.unicorncommander.ai](https://contact-ops.unicorncommander.a
 
 | What | Where |
 |------|-------|
-| Canonical design doc | `/Users/aaronstransky/Documents/Contact-Ops-MCP-Design.md` (5,685 lines, the source of truth for every fact in this repo) |
 | AI agent orientation | `CLAUDE.md` |
 | Architecture overview | `ARCHITECTURE.md` |
 | Ecosystem integration guide | `INTEGRATION_GUIDE.md` |
 | Developer workflow | `docs/DEVELOPER_GUIDE.md` |
 | End-user guide | `docs/USER_GUIDE.md` |
-| Open questions for Aaron | `/Users/aaronstransky/Documents/Contact-Ops-Open-Questions.md` |
 
 ## Quickstart (local dev)
 
